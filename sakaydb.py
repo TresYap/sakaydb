@@ -8,6 +8,7 @@ class SakayDBError(ValueError):
 class SakayDB():
 
     def __init__(self, data_dir):
+        """Initializes by taking path to the data and reading the necessary csvs for SakayDB."""
         self.data_dir = data_dir
 
     def add_trip():
