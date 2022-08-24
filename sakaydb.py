@@ -11,26 +11,26 @@ class SakayDB():
         """Initializes by taking path to the data and reading the necessary csvs for SakayDB."""
         self.data_dir = data_dir
 
-    def add_trip():
+    def add_trip(self):
         pass
 
-    def add_trips():
+    def add_trips(self):
         pass
 
-    def delete_trip():
+    def delete_trip(self):
         pass
 
-    def search_trips():
+    def search_trips(self):
         pass
 
-    def export_data():
+    def export_data(self):
         pass
 
-    def generate_statistics():
+    def generate_statistics(self):
         pass
 
-    def plot_statistics():
+    def plot_statistics(self):
         pass
 
-    def generate_odmatrix():
+    def generate_odmatrix(self):
         pass
