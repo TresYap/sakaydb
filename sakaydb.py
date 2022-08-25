@@ -25,23 +25,48 @@ class SakayDB():
         last_name = driver.split(', ')[0]
         given_name = driver.split(', ')[1]
 
-        if drivers[(drivers.given_name.str.lower() == given_name.lower()) 
+        if drivers.shape[0] == 0:
+            driver_id = 1
+        elif drivers[(drivers.given_name.str.lower() == given_name.lower()) 
                    & (drivers.last_name.str.lower() == last_name.lower())].shape[0] > 0:
             driver_id = (drivers[(drivers.given_name.str.lower() == given_name.lower()) 
                                  & (drivers.last_name.str.lower() == last_name.lower())]
                          ['driver_id'].values[0])
         else:
-            if drivers.shape[0] == 0: #gotta check with this
-                driver_id = 1
-            else:
-                driver_id = drivers['driver_id'].iloc[-1] + 1
+            driver_id = drivers['driver_id'].iloc[-1] + 1
+            new_row = pd.DataFrame({
+                'driver_id': [driver_id],
+                'given_name': [given_name],
+                'last_name': [last_name]
+            })
+            drivers = pd.concat([drivers, new_row], ignore_index=True)
 
-            drivers.loc[len(drivers.index)] = [drivers['driver_id'].iloc[-1] + 1,
-                                               given_name,
-                                               last_name]
-        #Step 1b: Get pickup and dropoff id
-        pickup_loc_id = locations[locations.loc_name == pickup_loc_name]['location_id'].values[0]
-        dropoff_loc_id = locations[locations.loc_name == dropoff_loc_name]['location_id'].values[0]
+        #Step 1b: Get or create pickup and dropoff id
+        if locations.shape[0] == 0:
+            pickup_loc_id = 1
+            dropoff_loc_id = 2
+        else:
+            if pickup_loc_name in locations.loc_name.values.tolist():
+                pickup_loc_id = (locations[locations.loc_name == pickup_loc_name]['location_id']
+                                 .values[0])
+            else:
+                pickup_loc_id = locations['location_id'].iloc[-1] + 1
+                new_row = pd.DataFrame({
+                'location_id': [pickup_loc_id],
+                'loc_name': [pickup_loc_name],
+                })
+                locations = pd.concat([locations, new_row], ignore_index=True)
+
+            if dropoff_loc_name in locations.loc_name.values.tolist():
+                dropoff_loc_id = (locations[locations.loc_name == dropoff_loc_name]['location_id']
+                                  .values[0])
+            else:
+                dropoff_loc_id = locations['location_id'].iloc[-1] + 1
+                new_row = pd.DataFrame({
+                'location_id': [dropoff_loc_id],
+                'loc_name': [dropoff_loc_name],
+                })
+                locations = pd.concat([locations, new_row], ignore_index=True)
 
         #Step 2: Insert row
         #Step 2a: Check if row exists -> out: SakayDBError
@@ -49,7 +74,8 @@ class SakayDB():
 
         print(driver_id)
         print(pickup_loc_id, dropoff_loc_id)
-        print(drivers)
+        display(drivers)
+        display(locations.tail())
         #to_csv section
         #trips.to_csv('trips.csv', index=False)
         #drivers.to_csv('drivers.csv', index=False)
