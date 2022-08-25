@@ -12,11 +12,11 @@ class SakayDB():
         self.data_dir = data_dir
 
     def add_trip(self, driver, pickup_datetime, dropoff_datetime, passenger_count,
-             pickup_loc_name, dropoff_loc_name, trip_distance, fare_amount):
+                 pickup_loc_name, dropoff_loc_name, trip_distance, fare_amount):
         #Step 0: Import dfs question 1: should the file always exist regardless of size?
-        trips = pd.read_csv(data_dir + 'trips_test.csv')
-        drivers = pd.read_csv(data_dir + 'drivers_test.csv')
-        locations = pd.read_csv(data_dir + 'locations.csv')
+        trips = pd.read_csv(self.data_dir + 'trips.csv')
+        drivers = pd.read_csv(self.data_dir + 'drivers.csv')
+        locations = pd.read_csv(self.data_dir + 'locations.csv')
 
         #Step 1: Convert input to trips row (function input -> expected entry)
 
@@ -70,16 +70,34 @@ class SakayDB():
 
         #Step 2: Insert row
         #Step 2a: Check if row exists -> out: SakayDBError
-        #Step 2b: If row not exist, append at end of file
+        # driver (case-insensitive), pickup_datetime, dropoff_datetime, passenger_count,
+        # pickup_loc_name, dropoff_loc_name, trip_distance and fare_amount
+        #TODO: check if timestamp matching necessary or if string is enough
 
-        print(driver_id)
-        print(pickup_loc_id, dropoff_loc_id)
+        row = {
+            'driver_id': driver_id,
+            'pickup_datetime': pickup_datetime,
+            'dropoff_datetime': dropoff_datetime,
+            'passenger_count': passenger_count,
+            'pickup_loc_id': pickup_loc_id,
+            'dropoff_loc_id': dropoff_loc_id,
+            'trip_distance': trip_distance,
+            'fare_amount': fare_amount
+        }
+        if row in trips.loc[:, trips.columns != 'trip_id'].to_dict(orient='records'):
+            raise SakayDBError
+        else:
+            row['trip_id'] = trips['trip_id'].iloc[-1] + 1
+            trips = pd.concat([trips, pd.DataFrame.from_dict([row])], ignore_index=True)
+
+        #Step 2b: If row not exist, append at end of file
         display(drivers)
         display(locations.tail())
+        display(trips)
         #to_csv section
-        #trips.to_csv('trips.csv', index=False)
-        #drivers.to_csv('drivers.csv', index=False)
-        pass
+        trips.to_csv('trips.csv', index=False)
+        drivers.to_csv('drivers.csv', index=False)
+        locations.to_csv('locations.csv', index=False)
 
     def add_trips(self):
         pass
