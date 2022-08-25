@@ -84,11 +84,13 @@ class SakayDB():
             'trip_distance': trip_distance,
             'fare_amount': fare_amount
         }
-        if row in trips.loc[:, trips.columns != 'trip_id'].to_dict(orient='records'):
+        if trips.shape[0] == 0:
+            row['trip_id'] = 1
+        elif row in trips.loc[:, trips.columns != 'trip_id'].to_dict(orient='records'):
             raise SakayDBError
         else:
             row['trip_id'] = trips['trip_id'].iloc[-1] + 1
-            trips = pd.concat([trips, pd.DataFrame.from_dict([row])], ignore_index=True)
+        trips = pd.concat([trips, pd.DataFrame.from_dict([row])], ignore_index=True)
 
         #Step 2b: If row not exist, append at end of file
         display(drivers)
