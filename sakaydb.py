@@ -95,9 +95,9 @@ class SakayDB():
         display(locations.tail())
         display(trips)
         #to_csv section
-        trips.to_csv('trips.csv', index=False)
-        drivers.to_csv('drivers.csv', index=False)
-        locations.to_csv('locations.csv', index=False)
+        trips.to_csv(self.data_dir + 'trips.csv', index=False)
+        drivers.to_csv(self.data_dir + 'drivers.csv', index=False)
+        locations.to_csv(self.data_dir + 'locations.csv', index=False)
 
     def add_trips(self):
         pass
