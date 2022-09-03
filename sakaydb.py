@@ -140,8 +140,18 @@ class SakayDB():
 
         return trips['trip_id'].iloc[-1]
 
-    def add_trips(self):
-        pass
+    def add_trips(self, trips):
+        out = []
+        for i, trip in enumerate(trips):
+            try:
+                out.append(self.add_trip(**trip))
+            except SakayDBError:
+                print(f"Warning: trip index {i} is already in the "
+                      "database. Skipping...")
+            except Exception as e:
+                print(f"Warning: trip index {i} has invalid or "
+                      "incomplete information. Skipping...")
+        return out
 
     def delete_trip(self):
         pass
