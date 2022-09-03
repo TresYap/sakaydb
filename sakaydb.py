@@ -30,10 +30,7 @@ class SakayDB():
         pass
 
     def plot_statistics(self):
-        """
-        Test comment for Van's function.
-        """
-        return None
+        pass
 
     def generate_odmatrix(self):
         pass
