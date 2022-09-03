@@ -1,9 +1,12 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 class SakayDBError(ValueError):
-    pass
+     def __init__(self, message="SakayDBError"):
+        self.message = message
+        super().__init__(self.message)
 
 class SakayDB():
 
