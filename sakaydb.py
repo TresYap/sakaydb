@@ -31,28 +31,58 @@ class SakayDB():
         
     def plot_statistics(self, stat):
         if stat == 'trip':
-            df_trips = pd.read_csv(os.path.join(self.data_dir, 'trips.csv'))
-            df_trips['pickup_datetime'] = pd.to_datetime(df_trips['pickup_datetime'],
-                                                         format='%X,%d-%m-%Y')
+            df_trips = (
+                pd.read_csv(os.path.join(self.data_dir, 'trips.csv'))
+            )
 
-            df_trips_new = df_trips.groupby('pickup_datetime')['trip_id'].nunique().reset_index()
+            df_trips['pickup_datetime'] = (
+                pd.to_datetime(df_trips['pickup_datetime'],
+                               format='%X,%d-%m-%Y')
+            )
+
+            df_trips_new = (
+                df_trips.groupby('pickup_datetime')
+                ['trip_id'].nunique().reset_index()
+            )
+
             df_trips_new.set_index('pickup_datetime', inplace=True)
             df_trips_fin = df_trips_new.resample('D').sum().reset_index()
-            df_trips_fin['day_of_week'] = df_trips_fin['pickup_datetime'].dt.day_name()
-            df_trips_mean = df_trips_fin.groupby('day_of_week')['trip_id'].mean().reset_index()
+
+            df_trips_fin['day_of_week'] = (
+                df_trips_fin['pickup_datetime'].dt.day_name()
+            )
+
+            df_trips_mean = (
+                df_trips_fin.groupby('day_of_week')
+                ['trip_id'].mean().reset_index()
+            )
 
             days_in_nums = {'Monday': 0, 'Tuesday': 1,
                             'Wednesday': 2, 'Thursday': 3,
                             'Friday': 4, 'Saturday': 5, 'Sunday': 6}
 
-            df_trips_mean['days_in_nums'] = df_trips_mean['day_of_week'].map(days_in_nums)
-            df_trips_sorted = df_trips_mean.sort_values(by=['days_in_nums'], ascending=True)
-            df_trips_sorted.drop("days_in_nums", axis=1, inplace=True)
+            df_trips_mean['days_in_nums'] = (
+                df_trips_mean['day_of_week'].map(days_in_nums)
+            )
+
+            df_trips_sorted = (
+                df_trips_mean.sort_values(by=['days_in_nums'],
+                                          ascending=True)
+            )
+
+            df_trips_sorted.drop("days_in_nums",
+                                 axis=1, inplace=True)
             df_trips_sorted.set_index('day_of_week', inplace=True)
 
-            graph = df_trips_sorted.plot(legend=None, kind='bar', figsize=(12, 8))
+            graph = (
+                df_trips_sorted.plot(legend=None,
+                                     kind='bar', figsize=(12, 8))
+            )
+
             y_range = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45]
-            y_range1 = ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45']
+            y_range1 = ['0', '5', '10', '15', '20',
+                        '25', '30', '35', '40', '45']
+
             graph.yaxis.set_ticks(y_range)
             graph.yaxis.set_ticklabels(y_range1)
             graph.set_title('Average trips per day')
@@ -60,24 +90,59 @@ class SakayDB():
             graph.set_xlabel('Day of week')
             plt.show()
             return graph
+
         elif stat == 'passenger':
-            df_trips = pd.read_csv(os.path.join(self.data_dir, 'trips.csv'))
-            df_trips['pickup_datetime'] = pd.to_datetime(df_trips['pickup_datetime'], format='%X,%d-%m-%Y')
-            df_trial = df_trips.groupby(['pickup_datetime', 'passenger_count'])['trip_id'].nunique()
-            df_trial1 = df_trial.groupby([pd.Grouper(level='passenger_count'),
-                                          pd.Grouper(level='pickup_datetime', freq='D')]).sum().reset_index()
-            df_trial1['day_of_week'] = df_trial1['pickup_datetime'].dt.day_name()
-            df_fin = df_trial1.groupby(['passenger_count', 'day_of_week'])['trip_id'].mean().reset_index()
+            df_trips = (
+                pd.read_csv(os.path.join(self.data_dir, 'trips.csv'))
+            )
+
+            df_trips['pickup_datetime'] = (
+                pd.to_datetime(df_trips['pickup_datetime'],
+                               format='%X,%d-%m-%Y')
+            )
+
+            df_trial = (
+                df_trips.groupby(['pickup_datetime', 'passenger_count'])
+                ['trip_id'].nunique()
+            )
+
+            df_trial1 = (
+                df_trial.groupby(
+                    [pd.Grouper(level='passenger_count'),
+                     pd.Grouper(level='pickup_datetime',
+                                freq='D')]).sum().reset_index()
+            )
+
+            df_trial1['day_of_week'] = (
+                df_trial1['pickup_datetime'].dt.day_name()
+            )
+
+            df_fin = (
+                df_trial1.groupby(['passenger_count', 'day_of_week'])
+                ['trip_id'].mean().reset_index()
+            )
 
             days_in_nums = {'Monday': 0, 'Tuesday': 1,
                             'Wednesday': 2, 'Thursday': 3,
                             'Friday': 4, 'Saturday': 5, 'Sunday': 6}
 
-            df_fin['days_in_nums'] = df_fin['day_of_week'].map(days_in_nums)
-            df_fin.set_index(['passenger_count', 'day_of_week', 'days_in_nums'], inplace=True)
-            df_final = df_fin.sort_index(level='days_in_nums').reset_index()
-            df_final.drop("days_in_nums", axis=1, inplace=True)
-            df_final.set_index(['passenger_count', 'day_of_week'], inplace=True)
+            df_fin['days_in_nums'] = (
+                df_fin['day_of_week'].map(days_in_nums)
+            )
+
+            df_fin.set_index(['passenger_count',
+                              'day_of_week', 'days_in_nums'],
+                             inplace=True)
+
+            df_final = (
+                df_fin.sort_index(level='days_in_nums').reset_index()
+            )
+
+            df_final.drop("days_in_nums",
+                          axis=1, inplace=True)
+
+            df_final.set_index(['passenger_count',
+                                'day_of_week'], inplace=True)
 
             fig, ax = plt.subplots(figsize=(12, 8))
             ax.plot(df_final.loc[0], marker='o', label=0)
@@ -91,38 +156,74 @@ class SakayDB():
             ax.legend()
             fig.canvas.draw()
             return ax
-        elif stat == 'driver':
-            df_trips = pd.read_csv(os.path.join(self.data_dir, 'trips.csv'))
-            df_drivers = pd.read_csv(os.path.join(self.data_dir, 'drivers.csv'))
-            df_trips['pickup_datetime'] = pd.to_datetime(df_trips['pickup_datetime'], format='%X,%d-%m-%Y')
 
-            df_drivers["full_name"] = df_drivers["given_name"] + ' ' + df_drivers["last_name"]
+        elif stat == 'driver':
+            df_trips = (
+                pd.read_csv(os.path.join(self.data_dir, 'trips.csv'))
+            )
+
+            df_drivers = (
+                pd.read_csv(os.path.join(self.data_dir, 'drivers.csv'))
+            )
+
+            df_trips['pickup_datetime'] = (
+                pd.to_datetime(df_trips['pickup_datetime'],
+                               format='%X,%d-%m-%Y')
+            )
+
+            df_drivers["full_name"] = (
+                df_drivers["given_name"] + ' ' + df_drivers["last_name"]
+            )
+
             names = dict(zip(df_drivers['driver_id'], df_drivers['full_name']))
 
-            df_driv = df_trips.groupby(['pickup_datetime', 'driver_id'])['trip_id'].nunique()
-            df_driv1 = df_driv.groupby([pd.Grouper(level='driver_id'),
-                                        pd.Grouper(level='pickup_datetime', freq='D')]).sum().reset_index()
-            df_driv1['day_of_week'] = df_driv1['pickup_datetime'].dt.day_name()
-            df_driv2 = df_driv1.groupby(['driver_id', 'day_of_week'])['trip_id'].mean().reset_index()
+            df_driv = (
+                df_trips.groupby(['pickup_datetime', 'driver_id'])
+                ['trip_id'].nunique()
+            )
+
+            df_driv1 = (
+                df_driv.groupby([pd.Grouper(level='driver_id'),
+                                 pd.Grouper(level='pickup_datetime',
+                                            freq='D')]).sum().reset_index()
+            )
+
+            df_driv1['day_of_week'] = (
+                df_driv1['pickup_datetime'].dt.day_name()
+            )
+
+            df_driv2 = (
+                df_driv1.groupby(['driver_id', 'day_of_week'])
+                ['trip_id'].mean().reset_index()
+            )
 
             days_in_nums = {'Monday': 0, 'Tuesday': 1,
                             'Wednesday': 2, 'Thursday': 3,
                             'Friday': 4, 'Saturday': 5, 'Sunday': 6}
 
-            df_driv2['days_in_nums'] = df_driv2['day_of_week'].map(days_in_nums)
+            df_driv2['days_in_nums'] = (
+                df_driv2['day_of_week'].map(days_in_nums)
+            )
+
             df_driv2['driver'] = df_driv2['driver_id'].map(names)
-            df_driv3 = df_driv2.sort_values(['days_in_nums', 'trip_id', 'driver'],
-                                            ascending=[True, False, True]).reset_index(drop=True)
+            df_driv3 = (
+                df_driv2.sort_values([
+                    'days_in_nums', 'trip_id', 'driver'],
+                    ascending=[True, False, True]).reset_index(drop=True)
+            )
+
             df_driv3.set_index(['days_in_nums'], inplace=True)
 
             row_count = 7
             column_count = 1
             h_space = 0.2
-            fig, ax = plt.subplots(row_count, column_count, figsize=(8, 25), sharex=True)
+            fig, ax = plt.subplots(row_count, column_count,
+                                   figsize=(8, 25), sharex=True)
             fig.subplots_adjust(hspace=h_space)
 
             for i in range(row_count):
-                ax[i].barh(df_driv3.loc[i].head(5)['driver'], df_driv3.loc[i].head(5)['trip_id'],
+                ax[i].barh(df_driv3.loc[i].head(5)['driver'],
+                           df_driv3.loc[i].head(5)['trip_id'],
                            label=df_driv3['day_of_week'].unique()[i])
                 ax[i].legend()
                 ax[i].invert_yaxis()
@@ -131,7 +232,6 @@ class SakayDB():
             return fig
         else:
             raise SakayDBError
-
 
     def generate_odmatrix(self):
         pass
