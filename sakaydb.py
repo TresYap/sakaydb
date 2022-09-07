@@ -31,14 +31,34 @@ class SakayDB():
         
     def plot_statistics(self, stat):
         """
-        This method returns a matplotlib Axes depending
-        on the stat parameter passed to it:
+        This method takes in a string input as the stat parameter.
 
-        trip: bar plot of the average number of trips per day of week.
-        
-        passenger: line plot showing the average passenger count per day.
-        
-        driver: bar plots of the drivers with the top average trips per day.
+        Note
+        ----------
+        The stat values are case-sensitive and do not add 'self' parameter
+        in the Parameters section.
+
+        Parameters
+        ----------
+        stat
+	    trip:
+	        When the parameter is set to 'trip', the method will show 
+                the average number of trips per day of week.
+	    passenger:
+	        When the parameter is set to 'passenger', the method will show
+                the average passenger count per day.
+	    driver:
+	        When the parameter is set to 'driver', the method will show 
+                the drivers with the top average trips per day.
+
+        Returns
+        ----------
+        matplotlib Axes 
+	    depending on the stat parameter passed to it:
+		trip: bar plot
+		passenger: line plots
+		driver: bar plots
+
         """
         if stat == 'trip':
             df_trips = (
