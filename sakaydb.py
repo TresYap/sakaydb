@@ -30,6 +30,16 @@ class SakayDB():
         pass
         
     def plot_statistics(self, stat):
+        """
+        This method returns a matplotlib Axes depending
+        on the stat parameter passed to it:
+
+        trip: bar plot of the average number of trips per day of week.
+        
+        passenger: line plot showing the average passenger count per day.
+        
+        driver: bar plots of the drivers with the top average trips per day.
+        """
         if stat == 'trip':
             df_trips = (
                 pd.read_csv(os.path.join(self.data_dir, 'trips.csv'))
