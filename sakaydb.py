@@ -33,6 +33,26 @@ class SakayDB():
         pass
 
     def generate_odmatrix(self, date_range=(None, None)):
+        """
+        Create a method generate_odmatrix that takes in a date_range input
+        parameter and returns a pandas.DataFrame with the trips.csv
+        pickup_loc_name as the row names (dataframe index) and dropoff_loc_name
+        as the columns. The values for each row-column combination is the average
+        daily number of trips that occured within the date_range specified.
+
+        date_range : takes a tuple of datetime strings, and filters trips based
+        on pickup_datetime. Defaults to None, in which case all dates are included.
+
+        Case 1: tuple like (value, None) sorts by key (chronological or ascending)
+        returns all entries from value, begin inclusive
+        Case 2: tuple like (None,value) sorts by key (chronological or ascending)
+        returns all entries up to value, end inclusive
+        Case 3: tuple like (value1, value2) sorts by key and returns values
+        between value1 and value2, end inclusive.
+
+        Input errors to the date_range parameter should be handled like that
+        of search_trips.
+        """
         # Check if date range tuple items are greater than 2
         if len(date_range) > 2:
             raise SakayDBError()
@@ -125,4 +145,3 @@ class SakayDB():
                                 values='unique_droppick').fillna(0))
 
         return final_df
-    
