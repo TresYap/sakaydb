@@ -68,7 +68,8 @@ class SakayDB():
             Return a pandas.DataFrame with the trips.csv pickup_loc_name as
             the row names (dataframe index) and dropoff_loc_name as the
             columns. The values for each row-column combination is the average
-            daily number of trips that occured within the date_range specified.
+            daily number of trips that occured within the date_range
+            specified.
 
         """
 
