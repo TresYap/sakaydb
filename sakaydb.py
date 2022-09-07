@@ -21,6 +21,36 @@ class SakayDB():
     def add_trip(self, driver, pickup_datetime, dropoff_datetime,
                  passenger_count, pickup_loc_name, dropoff_loc_name,
                  trip_distance, fare_amount):
+        """
+        Function will add a new trip to trips.csv if input is valid,
+        while adding new locations and drivers to the corresponding
+        csvs if they are new.
+
+        Parameters
+        ----------
+        driver
+            Full name of the driver of the trip with the form
+            Last name, Given name.
+        pickup_datetime
+            Time and date of trip pickup.
+        dropoff_datetime
+            Time and date of trip dropoff.
+        passenger_count
+            The number of passengers in the trip.
+        pickup_loc_name
+            The name of the pickup location.
+        dropoff_loc_name
+            The name of the destination location.
+        trip_distance
+            Total distance of trip in meters.
+        fare_amount
+            Amount paid for the trip.
+
+        Returns
+        -------
+        int
+            The ID number of the added trip in trips.csv.
+        """
         try:
             trips = pd.read_csv(os.path.join(self.data_dir, 'trips.csv'))
         except FileNotFoundError:
@@ -141,6 +171,24 @@ class SakayDB():
         return trips['trip_id'].iloc[-1]
 
     def add_trips(self, trips):
+        """
+        Function will add multiple trips to to trips.csv. This is
+        an extension to add_trip for multiple trips. Errors will
+        be raised if the trip is either invalid or already exists.
+
+        Parameters
+        ----------
+        trips : list
+            List of dictionaries containing inputs for the add_trip
+            function. The contents of each dictionary should be
+            valid or errors will be raised.
+
+        Returns
+        -------
+        list
+            List of trip_ids that were successfully addd to the
+            trips.csv file.
+        """
         out = []
         for i, trip in enumerate(trips):
             try:
