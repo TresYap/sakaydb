@@ -41,25 +41,24 @@ class SakayDB():
         Parameters
         ----------
         stat
-	    trip:
-	        When the parameter is set to 'trip', the method will show 
+            trip:
+                When the parameter is set to 'trip', the method will show
                 the average number of trips per day of week.
-	    passenger:
-	        When the parameter is set to 'passenger', the method will show
+            passenger:
+                When the parameter is set to 'passenger', the method will show
                 the average passenger count per day.
-	    driver:
-	        When the parameter is set to 'driver', the method will show 
+            driver:
+                When the parameter is set to 'driver', the method will show
                 the drivers with the top average trips per day.
 
         Returns
         ----------
-        matplotlib Axes 
-	    depending on the stat parameter passed to it:
-		trip: bar plot
-		passenger: line plots
-		driver: bar plots
+        matplotlib Axes
+            depending on the stat parameter passed to it:
+            trip: bar plot
+            passenger: line plots
+            driver: bar plots"""
 
-        """
         if stat == 'trip':
             df_trips = (
                 pd.read_csv(os.path.join(self.data_dir, 'trips.csv'))
