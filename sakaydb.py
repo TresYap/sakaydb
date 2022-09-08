@@ -175,16 +175,19 @@ class SakayDB():
                                 'day_of_week'], inplace=True)
 
             fig, ax = plt.subplots(figsize=(12, 8))
-            ax.plot(df_final.loc[0], marker='o', label=0)
-            ax.plot(df_final.loc[1], marker='o', label=1)
-            ax.plot(df_final.loc[2], marker='o', label=2)
-            ax.plot(df_final.loc[3], marker='o', label=3)
-            ax.set_yticks([9.0, 9.25, 9.5, 9.75, 10.0, 10.25,
-                           10.5, 10.75, 11.0, 11.25, 11.5])
-            ax.set_xlabel('Day of week')
-            ax.set_ylabel('Ave Trips')
-            ax.legend()
-            fig.canvas.draw()
+            
+            number = df_trial1['passenger_count'].unique()
+            number = np.sort(number)
+
+            for i in range(len(number)):
+                ax.plot(df_final.loc[i], marker='o', label=i)
+                ax.set_yticks([9.0, 9.25, 9.5, 9.75, 10.0, 10.25,
+                               10.5, 10.75, 11.0, 11.25, 11.5])
+                ax.set_xlabel('Day of week')
+                ax.set_ylabel('Ave Trips')
+                ax.legend()
+                fig.canvas.draw()
+
             return ax
 
         elif stat == 'driver':
