@@ -175,7 +175,7 @@ class SakayDB():
                                 'day_of_week'], inplace=True)
 
             fig, ax = plt.subplots(figsize=(12, 8))
-            
+
             number = df_trial1['passenger_count'].unique()
             number = np.sort(number)
 
