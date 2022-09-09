@@ -18,33 +18,6 @@ class SakayDB():
         pass
 
     def delete_trip(self, trip_id):
-        
-        """
-        This method takes in a string input as the stat parameter.
-        Note
-        ----------
-        The stat values are case-sensitive and do not add 'self' parameter
-        in the Parameters section.
-        Parameters
-        ----------
-        stat
-            trip:
-                When the parameter is set to 'trip', the method will show
-                the average number of trips per day of week.
-            passenger:
-                When the parameter is set to 'passenger', the method will show
-                the average passenger count per day.
-            driver:
-                When the parameter is set to 'driver', the method will show
-                the drivers with the top average trips per day.
-        Returns
-        ----------
-        matplotlib Axes
-            depending on the stat parameter passed to it:
-            trip: bar plot
-            passenger: line plots
-            driver: bar plots"""
-
 
         df = pd.read_csv(os.path.join(self.data_dir, 'trips.csv'))
 
@@ -114,7 +87,8 @@ class SakayDB():
                             val1, val2 = val[0], val[1]
 
                         df_vals = (df1.loc[df1[key].between(val1, val2)])
-                        df_merge = pd.merge(df1, df_vals).sort_values(key_order)
+                        df_merge = (pd.merge(df1, df_vals)
+                                    .sort_values(key_order))
 
                         df1 = df_merge
 
@@ -153,7 +127,7 @@ class SakayDB():
                                 format="%H:%M:%S,%d-%m-%Y")) == (
                                 pd._libs.tslibs.nattype.NaTType):
                                     raise SakayDBError
-                                
+
                         elif type(pd.to_datetime(val[1], errors='coerce',
                                   format="%H:%M:%S,%d-%m-%Y")) == (
                                   pd._libs.tslibs.nattype.NaTType):
@@ -175,11 +149,14 @@ class SakayDB():
                                 df1[key].max())
                         else:
                             val1, val2 = (
-                                pd.to_datetime(val[0], format="%H:%M:%S,%d-%m-%Y"),
-                                pd.to_datetime(val[1], format="%H:%M:%S,%d-%m-%Y"))
+                                pd.to_datetime(val[0],
+                                               format="%H:%M:%S,%d-%m-%Y"),
+                                pd.to_datetime(val[1],
+                                               format="%H:%M:%S,%d-%m-%Y"))
 
                         df_vals = df1.loc[df1[key].between(val1, val2)]
-                        df_merge = pd.merge(df1, df_vals).sort_values(key_order)
+                        df_merge = (pd.merge(df1, df_vals)
+                                    .sort_values(key_order))
 
                         df1 = df_merge
 
