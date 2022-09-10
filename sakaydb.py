@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 class SakayDBError(ValueError):
     pass
@@ -17,7 +18,7 @@ class SakayDB():
     def add_trips(self):
         pass
 
-   def delete_trip(self, trip_id):
+    def delete_trip(self, trip_id):
         """
         This function will delete a trip from trips.csv based on
         trip id.
