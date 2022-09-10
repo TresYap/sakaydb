@@ -4,9 +4,10 @@ import matplotlib.pyplot as plt
 import os
 from datetime import datetime
 
+
 class SakayDBError(ValueError):
 
-     def __init__(self, message="SakayDBError"):
+    def __init__(self, message="SakayDBError"):
         self.message = message
         super().__init__(self.message)
 
