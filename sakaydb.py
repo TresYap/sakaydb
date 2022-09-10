@@ -41,11 +41,34 @@ class SakayDB():
         df.to_csv(os.path.join(self.data_dir, 'trips.csv'), index=False)
 
     def search_trips(self, **kwargs):
+        """
+        This function will search through trips.csv and return trips
+        based on the filter parameters.
+        
+        Parameters
+        ----------
+        kwargs : dict
+            Parameters follow the same type and format as add_trip
+            functions.
+        
+        Returns
+        -------
+        data frame
+        """
+        if not os.path.isfile(os.path.join(self.data_dir, 'trips.csv')):
+            if kwargs == {}:
+                raise SakayDBError
+            else:
+                return []
+        else:
+            df = pd.read_csv(os.path.join(self.data_dir, 'trips.csv'))
 
-        df = pd.read_csv(os.path.join(self.data_dir, 'trips.csv'))
         df1 = df
         dfp = df1['pickup_datetime']
         dfd = df1['dropoff_datetime']
+
+        if kwargs == {}:
+            raise SakayDBError
 
         for key, val in kwargs.items():
             if (key != 'driver_id' and
