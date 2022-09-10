@@ -17,18 +17,28 @@ class SakayDB():
     def add_trips(self):
         pass
 
-    def delete_trip(self, trip_id):
+   def delete_trip(self, trip_id):
+        """
+        This function will delete a trip from trips.csv based on
+        trip id.
+        
+        Parameters
+        ----------
+        trip_id
+            The id of the trip to delete.
+        """
+        if not os.path.isfile(os.path.join(self.data_dir, 'trips.csv')):
+            raise SakayDBError
+        else:
+            df = pd.read_csv(os.path.join(self.data_dir, 'trips.csv'))
 
-        df = pd.read_csv(os.path.join(self.data_dir, 'trips.csv'))
-
-        cond = trip_id in df['trip_id']
+        cond = trip_id in df['trip_id'].values
         if not cond:
             raise SakayDBError
-
         else:
             df.drop(df.index[df['trip_id'] == trip_id], inplace=True)
 
-        return df.to_csv('trips.csv', index=False)
+        df.to_csv(os.path.join(self.data_dir, 'trips.csv'), index=False)
 
     def search_trips(self, **kwargs):
 
