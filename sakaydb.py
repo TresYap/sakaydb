@@ -21,7 +21,7 @@ class SakayDB():
         """
         This function will delete a trip from trips.csv based on
         trip id.
-        
+
         Parameters
         ----------
         trip_id
@@ -44,13 +44,13 @@ class SakayDB():
         """
         This function will search through trips.csv and return trips
         based on the filter parameters.
-        
+
         Parameters
         ----------
         kwargs : dict
             Parameters follow the same type and format as add_trip
             functions.
-        
+
         Returns
         -------
         data frame
@@ -110,7 +110,7 @@ class SakayDB():
 
                         if (val[0] is None and
                                 val[1] is None):
-                                    raise SakayDBError
+                            raise SakayDBError
 
                         elif val[0] is None:
                             val1, val2 = df1[key].min(), val[1]
@@ -141,7 +141,7 @@ class SakayDB():
                         if type(pd.to_datetime(val, errors='coerce',
                                 format="%H:%M:%S,%d-%m-%Y")) == (
                                 pd._libs.tslibs.nattype.NaTType):
-                                    raise SakayDBError
+                            raise SakayDBError
 
                         val = pd.to_datetime(val,
                                              format="%H:%M:%S,%d-%m-%Y",
@@ -159,16 +159,16 @@ class SakayDB():
                         if type(pd.to_datetime(val[0], errors='coerce',
                                 format="%H:%M:%S,%d-%m-%Y")) == (
                                 pd._libs.tslibs.nattype.NaTType):
-                                    raise SakayDBError
+                            raise SakayDBError
 
                         elif type(pd.to_datetime(val[1], errors='coerce',
                                   format="%H:%M:%S,%d-%m-%Y")) == (
                                   pd._libs.tslibs.nattype.NaTType):
-                                    raise SakayDBError
+                            raise SakayDBError
 
                         elif (val[0] is None and
                                 val[1] is None):
-                                    raise SakayDBError
+                            raise SakayDBError
 
                         elif val[0] is None:
                             val1, val2 = (
